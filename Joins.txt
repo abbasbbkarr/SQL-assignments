@@ -1,0 +1,72 @@
+-- Use the database
+USE fruits;
+
+-- Drop tables if they exist (to ensure a clean environment for re-creation)
+DROP TABLE IF EXISTS `Table A`;
+DROP TABLE IF EXISTS `Table 2`;
+
+-- Create Table A
+CREATE TABLE `Table A` (
+    id INT,
+    name VARCHAR(50)
+);
+
+-- Insert data into Table A
+INSERT INTO `Table A` (id, name) VALUES
+(1, 'apple'),
+(1, 'apple'),
+(1, 'apple'),
+(1, 'apple'),
+(2, 'Banana'),
+(2, 'Banana'),
+(3, 'Guava');
+
+-- Create Table 2
+CREATE TABLE `Table 2` (
+    id INT,
+    color VARCHAR(50)
+);
+
+-- Insert data into Table 2
+INSERT INTO `Table 2` (id, color) VALUES
+(1, 'Red'),
+(2, 'yellow'),
+(3, 'Green');
+
+-- Perform a LEFT JOIN query to retrieve names from "Table A" and colors from "Table 2"
+SELECT A.name, B.color 
+FROM `Table A` A 
+LEFT JOIN `Table 2` B 
+ON A.id = B.id;
+
+
+
+
+-- Inner Join
+SELECT COUNT(*) AS no_of_records, A.id, A.name, B.color
+FROM `Table A` A
+INNER JOIN `Table 2` B ON A.id = B.id
+GROUP BY A.id, A.name, B.color;
+
+-- Left Join
+SELECT COUNT(*) AS no_of_records, A.id, A.name, B.color
+FROM `Table A` A
+LEFT JOIN `Table 2` B ON A.id = B.id
+GROUP BY A.id, A.name, B.color;
+
+-- Right Join
+SELECT COUNT(*) AS no_of_records, A.id, A.name, B.color
+FROM `Table A` A
+RIGHT JOIN `Table 2` B ON A.id = B.id
+GROUP BY A.id, A.name, B.color;
+
+-- Full Outer Join (MySQL does not support FULL OUTER JOIN directly, we can achieve it using UNION)
+(SELECT COUNT(*) AS no_of_records, A.id, A.name, B.color
+FROM `Table A` A
+LEFT JOIN `Table 2` B ON A.id = B.id
+GROUP BY A.id, A.name, B.color)
+UNION
+(SELECT COUNT(*) AS no_of_records, B.id, A.name, B.color
+FROM `Table A` A
+RIGHT JOIN `Table 2` B ON A.id = B.id
+GROUP BY B.id, A.name, B.color);
